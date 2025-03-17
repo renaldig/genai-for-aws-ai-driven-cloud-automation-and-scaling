@@ -1,0 +1,25 @@
+{
+  "Comment": "Simple state machine for data validation, AI inference using Amazon Bedrock, and result formatting.",
+  "StartAt": "DataValidation",
+  "States": {
+    "DataValidation": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:102189329059:function:dataValidation",
+      "Next": "InvokeBedrockInference",
+      "ResultPath": "$.validationResult"
+    },
+    "InvokeBedrockInference": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:102189329059:function:bedrockInference",
+      "Next": "FormatResults",
+      "ResultPath": "$.inferenceResult"
+    },
+    "FormatResults": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:102189329059:function:resultFormatting",
+      "InputPath": "$.inferenceResult",
+      "End": true,
+      "ResultPath": "$.formattedResult"
+    }
+  }
+}
